@@ -1,46 +1,30 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 )
 
 var (
-	showVersion bool
-	showHelp    bool
+	versionArgValue bool
 )
 
+const CURRENT_VERSION string = "v0.0.0"
+
 func main() {
-	args := os.Args[1:]
+	const (
+		versionDefault bool   = false
+		versionUsage   string = "This returns the version of devlog-cli"
+	)
 
-	if len(args) == 0 {
-		fmt.Print("ok. funny.")
+	flag.BoolVar(&versionArgValue, "version", versionDefault, versionUsage)
+	flag.BoolVar(&versionArgValue, "v", versionDefault, versionUsage)
+
+	flag.Parse()
+
+	if versionArgValue {
+		fmt.Print("devlog-cli "+CURRENT_VERSION, "\n")
 		os.Exit(0)
 	}
-
-	for i := 0; i <= len(args); i++ {
-		switch args[0] {
-		case "-v", "--version":
-			showVersion = true
-
-		case "-h", "--help":
-			showHelp = true
-
-		default:
-			fmt.Fprintf(os.Stderr, "Usage: %s [--version/-v] [--help/-h]\n", os.Args[0])
-			os.Exit(2)
-		}
-	}
-
-	if showVersion {
-		fmt.Print("devlog-cli v0.0.0\n")
-		os.Exit(0)
-	}
-
-	if showHelp {
-		fmt.Print("devlog-cli is a developer tool that can be used to make participating in projects easier.\n")
-		os.Exit(0)
-	}
-
-	os.Exit(0)
 }
